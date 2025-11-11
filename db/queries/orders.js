@@ -20,7 +20,7 @@ export async function createOrder(date, note, user_id) {
     } = await db.query(sql, values);
     return newOrder;
   } catch (error) {
-    console.error("Error Creating New Order", error);
+    console.error(`Error Creating New Order`, error);
     throw error;
   }
 }
@@ -41,7 +41,7 @@ export async function getAllOrders() {
     const { rows: allOrders } = await db.query(sql);
     return allOrders;
   } catch (error) {
-    console.error("Error getting all orders", error);
+    console.error(`Error getting all orders`, error);
     throw error;
   }
 }
@@ -63,7 +63,7 @@ export async function getOrderById(id) {
     const { rows: orderById } = await db.query(sql, values);
     return orderById;
   } catch (error) {
-    console.error(`Error Retrieving Order By Id`);
+    console.error(`Error Retrieving Order By Id`, error);
     throw error;
   }
 }
