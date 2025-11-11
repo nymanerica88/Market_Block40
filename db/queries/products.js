@@ -13,9 +13,10 @@ export async function createProduct(title, description, price) {
       RETURNING *
       `;
 
+    const values = [title, description, price];
     const {
       rows: [products],
-    } = await db.query(sql, [title, description, price]);
+    } = await db.query(sql, values);
     return products;
   } catch (error) {
     console.error(`Error creating new product`, error);
@@ -54,9 +55,10 @@ export async function getProductById(id) {
       WHERE id = $1
       `;
 
+    const values = [id];
     const {
       rows: [products],
-    } = await db.query(sql, [id]);
+    } = await db.query(sql, values);
     return products;
   } catch (error) {
     console.error(`Error Retrieving Product By Id`, error);
