@@ -20,7 +20,8 @@ export async function createProduct(title, description, price) {
 
 //getAllProducts - retrieves all products in the products table
 // const { rows: products } the syntax changes because we're returning an array
-////of all products vs a single object like in createProduct
+////of all products (there will be multiple returned) vs a single object (one product)
+////like in createProduct
 //return products returns the array of products from the table
 export async function getAllProducts() {
   const sql = `
