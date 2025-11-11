@@ -14,7 +14,7 @@ import { createToken } from "#utils/jwt";
 //createUser inserts the new user into the database
 //createToken creates the JWT token containing the user id
 //sends 201 [Created] and returns the token
-router.post(
+usersRouter.post(
   "/register",
   requireBody(["username", "password"]),
   async (req, res) => {
@@ -30,7 +30,7 @@ router.post(
 //getUserByUsernameAndPassword retrieves the user if the user exists; user will be null if DNE
 //if authentication fails 401 [Unauthorized] and sends an error message
 //if authentication success, token is created and sent
-router.post(
+usersRouter.post(
   "/login",
   requireBody(["username", "password"]),
   async (req, res) => {
