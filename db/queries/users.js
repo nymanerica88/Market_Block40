@@ -8,17 +8,23 @@ import db from "#db/client";
 //{rows: [user]} takes the first row of the array and assigns it to the user
 //return user returns the new user that was just created
 export async function createUser(username, password) {
-  const sql = `
-    INSERT INTO users (username, password) 
-    VALUES ($1, $2) 
-    RETURNING *
-    `;
+  try {
+    const sql = `
+      INSERT INTO users (username, password) 
+      VALUES ($1, $2) 
+      RETURNING *
+      `;
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const {
-    rows: [user],
-  } = await db.query(sql, [username, hashedPassword]);
-  return user;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const values = [username, hashedPassword];
+    const {
+      rows: [user],
+    } = await db.query(sql, values);
+    return user;
+  } catch (error) {
+    console.error(`Error creating user`, error);
+    throw error;
+  }
 }
 
 //getUserByUsernameAndPassword - identifies user by username and password for login
@@ -28,21 +34,27 @@ export async function createUser(username, password) {
 //bcrypt.compare is a boolean that returns true if the hashed password matches the plaintext password and false if not
 //if the password authentication fails, returns null, if it passes, it returns the user
 export async function getUserByUsernameAndPassword(username, password) {
-  const sql = `
-    SELECT *
-    FROM users
-    WHERE username =$1
-    `;
+  try {
+    const sql = `
+      SELECT *
+      FROM users
+      WHERE username =$1
+      `;
 
-  const {
-    rows: [user],
-  } = await db.query(sql, [username]);
-  if (!user) return null;
+    const values = [username];
+    const {
+      rows: [user],
+    } = await db.query(sql, values);
+    if (!user) return null;
 
-  const authenticated = await bcrypt.compare(password, user.password);
-  if (!authenticated) return null;
+    const authenticated = await bcrypt.compare(password, user.password);
+    if (!authenticated) return null;
 
-  return user;
+    return user;
+  } catch (error) {
+    console.error(`Error getting User`, error);
+    throw error;
+  }
 }
 
 //getUsersByID - returns user by their id number (which is unique per the schema)
@@ -50,14 +62,20 @@ export async function getUserByUsernameAndPassword(username, password) {
 //again,{rows: [user]} takes the first row of the array and assigns it to the user
 //returns the user object (if found); undefined, if not found
 export async function getUserById(id) {
-  const sql = `
-    SELECT *
-    FROM users
-    WHERE id = $1
-    `;
+  try {
+    const sql = `
+      SELECT *
+      FROM users
+      WHERE id = $1
+      `;
 
-  const {
-    rows: [user],
-  } = await db.query(sql, [id]);
-  return user;
+    const values = [id];
+    const {
+      rows: [user],
+    } = await db.query(sql, values);
+    return user;
+  } catch (error) {
+    console.error(`Error Getting User By Id`, error);
+    throw error;
+  }
 }
