@@ -1,5 +1,5 @@
 import db from "#db/client";
-// import { createUser } from "#db/queries/users";
+import { createUser } from "#db/queries/users";
 // import { createProduct } from "#db/queries/products";
 // import { addProductToOrder } from "#db/orders_products";
 
@@ -27,13 +27,13 @@ async function seed() {
   const birthChartPrint = await createProduct({
     title: "Custom Birth Chart Print",
     description: "Personalized natal chart with optional foil printing",
-    price: 44.00,
+    price: 44.0,
   });
 
   const crystalKit = await createProduct({
     title: "Crystal Healing Kit",
     description: "Rose quartz, amethyst, citrine, and clear quartz bundle",
-    price: 32.50,
+    price: 32.5,
   });
 
   const moonLamp = await createProduct({
@@ -51,13 +51,13 @@ async function seed() {
   const sageBundle = await createProduct({
     title: "Sage & Palo Santo Cleansing Bundle",
     description: "Ethically sourced sage stick + palo santo",
-    price: 12.50,
+    price: 12.5,
   });
 
   const zodiacMug = await createProduct({
     title: "Zodiac Sign Mug",
     description: "Ceramic mug with your zodiac constellation",
-    price: 18.00,
+    price: 18.0,
   });
 
   const astrologyNecklace = await createProduct({
@@ -69,7 +69,7 @@ async function seed() {
   const meditationCandle = await createProduct({
     title: "Meditation Intention Candle",
     description: "Soy candle infused with lavender and moonstone chips",
-    price: 22.00,
+    price: 22.0,
   });
 
   const starProjector = await createProduct({
@@ -90,11 +90,31 @@ async function seed() {
   console.log("🧾 Order created for user id:", user.id);
 
   // ---- Add At Least 5 Products to the Order ----
-  await addProductToOrder({ order_id: order.id, product_id: oracleCards.id, quantity: 1 });
-  await addProductToOrder({ order_id: order.id, product_id: crystalKit.id, quantity: 1 });
-  await addProductToOrder({ order_id: order.id, product_id: meditationCandle.id, quantity: 2 });
-  await addProductToOrder({ order_id: order.id, product_id: astrologyJournal.id, quantity: 1 });
-  await addProductToOrder({ order_id: order.id, product_id: zodiacMug.id, quantity: 1 });
+  await addProductToOrder({
+    order_id: order.id,
+    product_id: oracleCards.id,
+    quantity: 1,
+  });
+  await addProductToOrder({
+    order_id: order.id,
+    product_id: crystalKit.id,
+    quantity: 1,
+  });
+  await addProductToOrder({
+    order_id: order.id,
+    product_id: meditationCandle.id,
+    quantity: 2,
+  });
+  await addProductToOrder({
+    order_id: order.id,
+    product_id: astrologyJournal.id,
+    quantity: 1,
+  });
+  await addProductToOrder({
+    order_id: order.id,
+    product_id: zodiacMug.id,
+    quantity: 1,
+  });
 
   console.log("✅ Added 5 products to order:", order.id);
   console.log("🌟 Seed completed successfully!");
