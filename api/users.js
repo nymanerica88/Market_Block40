@@ -17,11 +17,15 @@ import { createToken } from "#utils/jwt";
 usersRouter.post(
   "/register",
   requireBody(["username", "password"]),
-  async (req, res) => {
-    const { username, password } = req.body;
-    const user = await createUser(username, password);
-    const token = createToken({ id: user.id });
-    res.status(201).send(token);
+  async (req, res, next) => {
+    try {
+      const { username, password } = req.body;
+      const user = await createUser({ username, password });
+      const token = createToken({ id: user.id });
+      res.status(201).send({ token });
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
@@ -33,12 +37,17 @@ usersRouter.post(
 usersRouter.post(
   "/login",
   requireBody(["username", "password"]),
-  async (req, res) => {
-    const { username, password } = req.body;
-    const user = await getUserByUsernameAndPassword(username, password);
-    if (!user) return res.status(401).send("Invalid username and/or password");
-    const token = createToken({ id: user.id });
-    res.send(token);
+  async (req, res, next) => {
+    try {
+      const { username, password } = req.body;
+      const user = await getUserByUsernameAndPassword({ username, password });
+      if (!user)
+        return res.status(401).send("Invalid username and/or password");
+      const token = createToken({ id: user.id });
+      res.status(200).send({ token });
+    } catch (error) {
+      next(error);
+    }
   }
 );
 
