@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import db from "#db/client";
 
 //createUser - creates a new user with username and password in the database
-//($1,$2) are placeholders to prevent sequel injection
+//($1,$2) are placeholders to prevent SQL injection
 //RETURNING * returns the new row from the database
 //bcrypt.hash scrambles the plain text password; applies the scramble 10x
 //{rows: [user]} takes the first row of the array and assigns it to the user
@@ -33,7 +33,7 @@ export async function createUser({ username, password }) {
 //if no user is found, it returns null [if (!user) return null;]
 //bcrypt.compare is a boolean that returns true if the hashed password matches the plaintext password and false if not
 //if the password authentication fails, returns null, if it passes, it returns the user
-export async function getUserByUsernameAndPassword(username, password) {
+export async function getUserByUsernameAndPassword({ username, password }) {
   try {
     const sql = `
       SELECT *
@@ -61,7 +61,7 @@ export async function getUserByUsernameAndPassword(username, password) {
 //returns all records from the users table where the id is equal to the id that was passed in
 //again,{rows: [user]} takes the first row of the array and assigns it to the user
 //returns the user object (if found); undefined, if not found
-export async function getUserById(id) {
+export async function getUserById({ id }) {
   try {
     const sql = `
       SELECT *

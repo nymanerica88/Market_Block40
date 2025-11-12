@@ -1,7 +1,7 @@
 import db from "#db/client";
 
 //createOrder - creates a new order with date, note, user_id
-//($1, $2, $3) are placeholders to prevent sequel injection
+//($1, $2, $3) are placeholders to prevent SQL injection
 //RETURNING * returns the new row from the database
 //{rows: [newOrder]} assigns first row of the array to the newly created order
 ////renames "rows" to "newOrder"
@@ -46,24 +46,24 @@ export async function getAllOrders() {
   }
 }
 
-//getOrdersById - retrieves order by id number
+//getOrderById - retrieves order by id number
 //rows: [orderById]} since the product id is the primary key, it is unique, so this will only
 ////return a single object, so the same syntax that was used for createOrder is also used here
 ////renames "rows" to "orderById"
 //return orderById returns the order (object) from the table
-export async function getOrderById(id) {
+export async function getOrderById({ id }) {
   try {
     const sql = `
         SELECT *
         FROM orders
-        WHERE id = $1        
+        WHERE id = $1;        
         `;
 
     const values = [id];
     const {
-      rows: [orderById],
+      rows: [order],
     } = await db.query(sql, values);
-    return orderById;
+    return order;
   } catch (error) {
     console.error(`Error Retrieving Order By Id`, error);
     throw error;

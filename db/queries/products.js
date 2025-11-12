@@ -1,7 +1,7 @@
 import db from "#db/client";
 
 //createProduct - creates a new product with title, description, and price
-//($1,$2, $3) are placeholders to prevent sequel injection
+//($1,$2, $3) are placeholders to prevent SQL injection
 //RETURNING * returns the new row from the database
 //{rows: [products]} takes the first row of the array and assigns it to the product
 //return products returns the new product (object) that was just created
@@ -15,9 +15,9 @@ export async function createProduct({ title, description, price }) {
 
     const values = [title, description, price];
     const {
-      rows: [products],
+      rows: [product],
     } = await db.query(sql, values);
-    return products;
+    return product;
   } catch (error) {
     console.error(`Error creating new product`, error);
     throw error;
@@ -39,7 +39,7 @@ export async function getAllProducts() {
     const { rows: products } = await db.query(sql);
     return products;
   } catch (error) {
-    console.error(`Error getting all products`);
+    console.error(`Error getting all products`, error);
     throw error;
   }
 }
@@ -47,7 +47,7 @@ export async function getAllProducts() {
 //getProductsById - retrieves product by id number
 //rows: [products]} since the product id is the primary key, it is unique, so this will only
 ////return a single object, so the same syntax that was used for createProduct is also used here
-export async function getProductById(id) {
+export async function getProductById({ id }) {
   try {
     const sql = `
       SELECT *
