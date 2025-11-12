@@ -1,5 +1,13 @@
 import db from "#db/client";
 
+//addProductToOrder - adds a new product to an existing order
+//($1, $2, $3) are placeholders to prevent sequel injection
+//RETURNING * returns the new row from the database
+//{rows: [productAddedToOrder]} assigns first row of the array to thr product added to the order
+////renames "rows" to "productAddedToOrder"
+//return productAddedToOrder returns the product added to order (object)
+//console.log - if a product is sucessfully added to the order, it shows a message showing the
+///name of the product and the quantity of the product added to the order with a confirmation
 export async function addProductToOrder(order_id, product_id, quantity) {
   try {
     const sql = `
@@ -20,6 +28,10 @@ export async function addProductToOrder(order_id, product_id, quantity) {
   }
 }
 
+//getProductsByOrder - returns all of the products included on the order_id passed in for that user only
+//sql - returns all items from the products table for the given order
+////JOIN creates an inner join (combines rows from both tables, but only includes rows where there is a match)
+////////match: the (product) id in the products table is equalto the product_id in the orders_products table;
 export async function getProductsByOrder(order_id) {
   try {
     const sql = `
@@ -41,6 +53,10 @@ export async function getProductsByOrder(order_id) {
   }
 }
 
+//getOrdersByProduct - returns all of the orders containing the product_id passed in for that user only
+//sql - returns all items from the orders table for the given product
+////JOIN creates an inner join (combines rows from both tables, but only includes rows where there is a match)
+////////match: the (orders) id in the orders table is equalto the order_id in the orders_products table;
 export async function getOrdersByProduct(product_id) {
   try {
     const sql = `
