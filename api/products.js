@@ -4,9 +4,9 @@ import {
   getAllProducts,
   getProductById,
 } from "#db/queries/products";
-import requireBody from "#middleware/requireBody";
-import requireUser from "#middleware/requireUser";
-import { createToken } from "#utils/jwt";
+// import requireBody from "#middleware/requireBody";
+// import requireUser from "#middleware/requireUser";
+// import { createToken } from "#utils/jwt";
 
 const productsRouter = express.Router();
 
@@ -22,8 +22,8 @@ productsRouter.get("/", async (req, res, next) => {
 
 productsRouter.get("/:id", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const product = await getProductById(id);
+    const id = Number(req.params.id);
+    const product = await getProductById({ id });
     if (!product) return res.status(404).send("Product not found.");
     res.send(product);
   } catch (error) {
