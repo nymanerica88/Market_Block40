@@ -69,3 +69,20 @@ export async function getOrderById({ id }) {
     throw error;
   }
 }
+
+export async function getOrdersByUserId({ user_id }) {
+  try {
+    const sql = `
+    SELECT *
+    FROM orders
+    WHERE user_id = $1
+    `;
+
+    const values = [user_id];
+    const { rows: orders } = await db.query(sql, values);
+    return orders;
+  } catch (error) {
+    console.error("Error retrieving orders by User Id", error);
+    throw error;
+  }
+}
