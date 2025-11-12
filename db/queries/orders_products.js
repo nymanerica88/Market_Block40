@@ -8,19 +8,19 @@ import db from "#db/client";
 //return productAddedToOrder returns the product added to order (object)
 //console.log - if a product is sucessfully added to the order, it shows a message showing the
 ///name of the product and the quantity of the product added to the order with a confirmation
-export async function addProductToOrder(order_id, product_id, quantity) {
+export async function addProductToOrder({ order_id, product_id, quantity }) {
   try {
     const sql = `
-        INSERT INTO orders_products (order_id, product_id, quantity)
+        INSERT INTO orders_products ({order_id, product_id, quantity})
         VALUES ($1, $2, $3)
-        REUTRNING *       
+        RETURNING *       
         `;
 
     const values = [order_id, product_id, quantity];
-    const { rows: productAddedToOrder } = await db.query(sql, values);
-    console.log(
-      `Product: ${product.name}, Quantity: ${quantity} has been added to order`
-    );
+    const {
+      rows: [productAddedToOrder],
+    } = await db.query(sql, values);
+    console.log(`New product(s) have been added to this order`);
     return productAddedToOrder;
   } catch (error) {
     console.error(`Product could not be added to order`, error);
@@ -32,7 +32,7 @@ export async function addProductToOrder(order_id, product_id, quantity) {
 //sql - returns all items from the products table for the given order
 ////JOIN creates an inner join (combines rows from both tables, but only includes rows where there is a match)
 ////////match: the (product) id in the products table is equalto the product_id in the orders_products table;
-export async function getProductsByOrder(order_id) {
+export async function getProductsByOrder({ order_id }) {
   try {
     const sql = `
         SELECT *
@@ -57,7 +57,7 @@ export async function getProductsByOrder(order_id) {
 //sql - returns all items from the orders table for the given product
 ////JOIN creates an inner join (combines rows from both tables, but only includes rows where there is a match)
 ////////match: the (orders) id in the orders table is equalto the order_id in the orders_products table;
-export async function getOrdersByProduct(product_id) {
+export async function getOrdersByProduct({ product_id }) {
   try {
     const sql = `
         SELECT *

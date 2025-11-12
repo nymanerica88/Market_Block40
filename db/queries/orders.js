@@ -6,7 +6,7 @@ import db from "#db/client";
 //{rows: [newOrder]} assigns first row of the array to the newly created order
 ////renames "rows" to "newOrder"
 //return newOrder returns the new order (object) that was just created
-export async function createOrder(date, note, user_id) {
+export async function createOrder({ date, note, user_id }) {
   try {
     const sql = `
         INSERT INTO orders (date, note, user_id)
@@ -34,7 +34,7 @@ export async function createOrder(date, note, user_id) {
 export async function getAllOrders() {
   try {
     const sql = `
-        SELCECT *
+        SELECT *
         FROM orders;
         `;
 
@@ -60,7 +60,9 @@ export async function getOrderById(id) {
         `;
 
     const values = [id];
-    const { rows: orderById } = await db.query(sql, values);
+    const {
+      rows: [orderById],
+    } = await db.query(sql, values);
     return orderById;
   } catch (error) {
     console.error(`Error Retrieving Order By Id`, error);

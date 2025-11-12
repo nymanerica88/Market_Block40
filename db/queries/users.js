@@ -7,7 +7,7 @@ import db from "#db/client";
 //bcrypt.hash scrambles the plain text password; applies the scramble 10x
 //{rows: [user]} takes the first row of the array and assigns it to the user
 //return user returns the new user that was just created
-export async function createUser(username, password) {
+export async function createUser({ username, password }) {
   try {
     const sql = `
       INSERT INTO users (username, password) 

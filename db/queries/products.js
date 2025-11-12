@@ -5,7 +5,7 @@ import db from "#db/client";
 //RETURNING * returns the new row from the database
 //{rows: [products]} takes the first row of the array and assigns it to the product
 //return products returns the new product (object) that was just created
-export async function createProduct(title, description, price) {
+export async function createProduct({ title, description, price }) {
   try {
     const sql = `
       INSERT INTO products (title, description, price)
