@@ -50,7 +50,7 @@ ordersRouter.get("/", requireUser, async (req, res, next) => {
 
 ordersRouter.get("/:id", requireUser, async (req, res, next) => {
   try {
-    const id = +req.params.id;
+    const id = Number(req.params.id);
     console.log(typeof id);
     const user_id = req.user.id;
     const order = await getOrderById({ id });
