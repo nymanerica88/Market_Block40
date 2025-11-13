@@ -139,6 +139,15 @@ ordersRouter.post(
   }
 );
 
+//GET route at /orders/:id/products; adds route to ordersRouter
+//const order_id - converts the order id number into a number
+//const user_id = req.user.id - obtains the id of logged in user
+//const order - awaits response from getOrderById (with order_id passed as a parameter)
+////if error with order, status 404[Not Found], sends message ("Order Not Found")
+////if (order.user_id !== user_id) - if the order user_id doesn't match the logged in user_id
+////returns 403[Forbidden] and the message "Error retrieving order"
+//const products - awaits the response from getProductsByOrderId (with order_id and user_id
+// passed in as parameters); if successful, status 200[OK]; if unsuccessful, shows `Error retrieving prodcuts by Order`
 ordersRouter.get("/:id/products", requireUser, async (req, res, next) => {
   try {
     const order_id = Number(req.params.id);
@@ -154,6 +163,7 @@ ordersRouter.get("/:id/products", requireUser, async (req, res, next) => {
     const products = await getProductsByOrder({ order_id, user_id });
     res.status(200).json(products);
   } catch (error) {
+    console.error(`Error retrieving products by Order`);
     next(error);
   }
 });
