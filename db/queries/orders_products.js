@@ -32,19 +32,20 @@ export async function addProductToOrder({ order_id, product_id, quantity }) {
 //sql - returns all items from the products table for the given order
 ////JOIN creates an inner join (combines rows from both tables, but only includes rows where there is a match)
 ////////match: the (product) id in the products table is equalto the product_id in the orders_products table;
-export async function getProductsByOrder({ order_id }) {
+export async function getProductsByOrder({ order_id, user_id }) {
   try {
     const sql = `
-        SELECT *
+        SELECT products.*, orders_products.quantity
         FROM products
         JOIN orders_products ON products.id = orders_products.product_id
+        JOIN orders ON orders.id = orders_products.order_id
         WHERE 
             orders_products.order_id = $1
             AND orders.user_id = $2
         ORDER BY products.id        
         `;
 
-    const values = [order_id];
+    const values = [order_id, user_id];
     const { rows: productsInOrder } = await db.query(sql, values);
     return productsInOrder;
   } catch (error) {
@@ -57,10 +58,10 @@ export async function getProductsByOrder({ order_id }) {
 //sql - returns all items from the orders table for the given product
 ////JOIN creates an inner join (combines rows from both tables, but only includes rows where there is a match)
 ////////match: the (orders) id in the orders table is equalto the order_id in the orders_products table;
-export async function getOrdersByProduct({ product_id }) {
+export async function getOrdersByProduct({ product_id, user_id }) {
   try {
     const sql = `
-        SELECT *
+        SELECT orders.*
         FROM orders
         JOIN orders_products ON orders.id = orders_products.order_id
         WHERE 
@@ -69,7 +70,7 @@ export async function getOrdersByProduct({ product_id }) {
         ORDER BY orders.id
         `;
 
-    const values = [product_id];
+    const values = [product_id, user_id];
     const { rows: ordersContainingProduct } = await db.query(sql, values);
     return ordersContainingProduct;
   } catch (error) {
