@@ -70,7 +70,7 @@ ordersRouter.get("/", requireUser, async (req, res, next) => {
 //const order awaits response from getOrderById (passing in the id as a parameter)
 ////if error with order, returns 404[Not Found], and message "Order Not Found"
 ////if (order.user_id !== user_id) - if the order user_id doesn't match the logged in user_id
-////returns 403[Forbidden] and the message "Error retrieving order"
+////returns status 403[Forbidden] and the message "Error retrieving order"
 ordersRouter.get("/:id", requireUser, async (req, res, next) => {
   try {
     const id = Number(req.params.id);
@@ -91,6 +91,19 @@ ordersRouter.get("/:id", requireUser, async (req, res, next) => {
   }
 });
 
+//POST route at /orders/:id/products; adds route to ordersRouter
+//requireBody(["productId", "quantity"]) - makes sure productId and quantity are present
+////in the request body
+//const order_id - converts the order id number into a number
+//const user_id = req.user.id - obtains the id of logged in user
+//const order - awaits response from getOrdersById (passes in the order_id as a parameter)
+////if there's an issue with order, response 404[Not Found] and displays message "Order Not Found"
+////if (order.user_id !== user_id) - if the order user_id doesn't match the logged in user_id
+////returns 403[Forbidden] and the message "Error retrieving order"
+//const product - await get ProductById (passes productId as a parameter)
+////if error with product, return status 400[Bad Request]; shows message "Product does not Exist"
+//const productAdded - awaits success of add ProductToOrder using the provided user inputs
+////if successful, status 201[Created], shows the added product; if unsuccessul, shows `Error adding product to order`
 ordersRouter.post(
   "/:id/products",
   requireUser,
@@ -120,6 +133,7 @@ ordersRouter.post(
 
       res.status(201).json(productAdded);
     } catch (error) {
+      console.error(`Error adding product to order`, error);
       next(error);
     }
   }
