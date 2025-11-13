@@ -2,8 +2,6 @@ import express from "express";
 import { getAllProducts, getProductById } from "#db/queries/products";
 import { getOrdersByProduct } from "#db/queries/orders_products";
 import requireUser from "#middleware/requireUser";
-// import requireBody from "#middleware/requireBody";
-// import { createToken } from "#utils/jwt";
 
 const productsRouter = express.Router();
 
