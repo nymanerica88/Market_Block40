@@ -32,6 +32,7 @@ export async function addProductToOrder({ order_id, product_id, quantity }) {
 //sql - returns all items from the products table for the given order
 ////JOIN creates an inner join (combines rows from both tables, but only includes rows where there is a match)
 ////////match: the (product) id in the products table is equalto the product_id in the orders_products table;
+///////match: the (order) id in the orders table is equal to the order_id in the order_products table;
 export async function getProductsByOrder({ order_id, user_id }) {
   try {
     const sql = `
