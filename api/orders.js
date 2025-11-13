@@ -1,19 +1,33 @@
 import express from "express";
+//imports query functions from orders
 import {
   createOrder,
   getOrderById,
   getOrdersByUserId,
 } from "#db/queries/orders";
+//imports query functions from orders_products (join table)
 import {
   addProductToOrder,
   getProductsByOrder,
 } from "#db/queries/orders_products";
+//imports provided middleware
 import requireUser from "#middleware/requireUser";
 import requireBody from "#middleware/requireBody";
+//imports getProductById query from products
 import { getProductById } from "#db/queries/products";
 
 const ordersRouter = express.Router();
 
+//POST route at /orders; adds route to ordersRouter
+//requires date in the body; requires user to be logged-in
+//const user_id = req.user.id - obtains the id of logged in user
+//const { date, note = "" } = req.body - ensures date is included in
+////the request body and that ***note is optionl***; spent several hours
+////debugging this because making notes required causes the rest of the test
+////cases to fail; if there's an issue with the date, sends 400[Bad Request]
+////and a message of "Missing required fields: date"
+//const order - creates the new order, sends 201[Created] if the order creation
+////is successful; if unsuccessful, the message "Error creating order" shows
 ordersRouter.post(
   "/",
   requireBody(["date"]),
@@ -22,7 +36,6 @@ ordersRouter.post(
     try {
       const user_id = req.user.id;
       const { date, note = "" } = req.body;
-      console.log(req.body);
       if (!date) {
         return res.status(400).send(`Missing required fields: date`);
       }
@@ -35,12 +48,15 @@ ordersRouter.post(
   }
 );
 
+//GET route at /orders; adds route to the ordersRouter
+//const user_id = req.user.id - obtains the id of logged in user
+//await response from getOrdersById (passing in user_id as a parameter)
+////if successful, 200[OK]; sends list of orders
+////if unsuccessful, shows message "Error retrieving order list"
 ordersRouter.get("/", requireUser, async (req, res, next) => {
   try {
     const user_id = req.user.id;
-    // console.log(req.user);
     const orders = await getOrdersByUserId({ user_id });
-    console.log(orders);
     res.status(200).json(orders);
   } catch (error) {
     console.error(`Error retrieving order list`, error);
