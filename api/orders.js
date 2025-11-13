@@ -64,18 +64,21 @@ ordersRouter.get("/", requireUser, async (req, res, next) => {
   }
 });
 
+//GET route at /orders/id; adds route to ordersRouter
+//const id - takes the id number from the URL and converts it into a number
+//const user_id = req.user.id - obtains the id of logged in user
+//const order awaits response from getOrderById (passing in the id as a parameter)
+////if error with order, returns 404[Not Found], and message "Order Not Found"
+////if (order.user_id !== user_id) - if the order user_id doesn't match the logged in user_id
+////returns 403[Forbidden] and the message "Error retrieving order"
 ordersRouter.get("/:id", requireUser, async (req, res, next) => {
   try {
     const id = Number(req.params.id);
-    console.log(typeof id);
     const user_id = req.user.id;
     const order = await getOrderById({ id });
     if (!order) {
       return res.status(404).send(`Order not found`);
     }
-
-    console.log(order);
-    console.log(order.user_id !== user_id, order.user_id, user_id);
     if (order.user_id !== user_id) {
       return res
         .status(403)
