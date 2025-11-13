@@ -61,14 +61,13 @@ export async function getUserByUsernameAndPassword({ username, password }) {
 //returns all records from the users table where the id is equal to the id that was passed in
 //again,{rows: [user]} takes the first row of the array and assigns it to the user
 //returns the user object (if found); undefined, if not found
-export async function getUserById({ id }) {
+export async function getUserById(id) {
   try {
     const sql = `
       SELECT *
       FROM users
       WHERE id = $1
       `;
-
     const values = [id];
     const {
       rows: [user],
